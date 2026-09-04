@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- builder: compile the package + deps into an isolated prefix ----
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /build
 COPY pyproject.toml requirements.txt README.md ./
@@ -10,7 +10,7 @@ COPY qasccs ./qasccs
 RUN pip install --no-cache-dir --prefix=/install .
 
 # ---- runtime: minimal image, no compilers/build tools, non-root user ----
-FROM python:3.12-slim AS runtime
+FROM python:3.14-slim AS runtime
 
 # Security-relevant OS packages only; no build toolchain in the final image.
 RUN apt-get update && apt-get install -y --no-install-recommends \
