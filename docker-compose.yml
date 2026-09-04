@@ -1,0 +1,56 @@
+# Local/dev demo only — generates a throwaway self-signed CA + server/client
+# certs into a shared volume, then runs the mTLS server and a one-shot client.
+# For production, replace the `gen-certs` service with your real PKI
+# provisioning step (or mount externally-managed certs) — see the
+# "Production considerations" section of README.md.
+services:
+  gen-certs:
+    build: .
+    entrypoint: ["qasccs", "gen-certs", "--out", "/certs"]
+    volumes:
+      - certs:/certs
+    # Deliberately NOT overriding to root: this runs as the same non-root
+    # 'qascs' user as the server/client images. The private keys are written
+    # chmod 0600 (owner-only) — if this ran as root instead, the server/client
+    # containers (running as 'qascs') would get Permission Denied reading them.
+    # A fresh named volume is seeded from the image's /certs dir (already
+    # chown'd to qascs in the Dockerfile), so all three services share one uid.
+
+  server:
+    build: .
+    depends_on:
+      gen-certs:
+        condition: service_completed_successfully
+    environment:
+      QASCS_HOST: 0.0.0.0
+      QASCS_PORT: "8443"
+      QASCS_LOG_LEVEL: INFO
+    volumes:
+      - certs:/certs:ro
+    ports:
+      - "8443:8443"
+
+  client:
+    build: .
+    # --data-classification high recommends 'hybrid' mode under the default
+    # scenario. --allow-classical-fallback is required to complete the demo
+    # anyway, since real PQC/hybrid enforcement isn't implemented yet (see
+    # docs/pqc-integration.md) and --strict-policy (on by default) would
+    # otherwise refuse to silently downgrade and exit 2.
+    entrypoint:
+      ["qasccs", "client",
+       "--host", "server", "--port", "8443",
+       "--tls-server-name", "qasccs.local",
+       "--data-lifetime-years", "10", "--data-classification", "high",
+       "--allow-classical-fallback",
+       "--message", "hello from docker-compose"]
+    depends_on:
+      - server
+    environment:
+      QASCS_LOG_LEVEL: INFO
+    volumes:
+      - certs:/certs:ro
+    profiles: ["demo"]  # run explicitly: docker compose --profile demo run client
+
+volumes:
+  certs:

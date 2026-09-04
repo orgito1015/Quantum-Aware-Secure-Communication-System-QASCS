@@ -1,0 +1,108 @@
+# Labels Configuration for QASCS Project
+
+# This file documents the recommended labels for the project.
+# To create these labels in your repository:
+# 1. Go to: https://github.com/orgito1015/Quantum-Aware-Secure-Communication-System-QASCS-/labels
+# 2. Create or update labels based on this configuration
+
+## Type Labels
+
+bug:
+  color: "d73a4a"
+  description: "Something isn't working"
+
+enhancement:
+  color: "a2eeef"
+  description: "New feature or request"
+
+documentation:
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+question:
+  color: "d876e3"
+  description: "Further information is requested"
+
+## Component Labels
+
+quantum-risk-engine:
+  color: "1d76db"
+  description: "Related to quantum threat assessment and risk engine"
+
+secure-channel:
+  color: "5319e7"
+  description: "Related to TLS/secure communication channel"
+
+pqc:
+  color: "0e8a16"
+  description: "Post-quantum cryptography related"
+
+client:
+  color: "fbca04"
+  description: "Client-side code and functionality"
+
+server:
+  color: "fbca04"
+  description: "Server-side code and functionality"
+
+tools:
+  color: "c5def5"
+  description: "Development tools and utilities"
+
+testing:
+  color: "bfd4f2"
+  description: "Testing and test infrastructure"
+
+## Priority Labels
+
+priority-critical:
+  color: "b60205"
+  description: "Critical issue, needs immediate attention"
+
+priority-high:
+  color: "d93f0b"
+  description: "High priority issue"
+
+priority-medium:
+  color: "fbca04"
+  description: "Medium priority issue"
+
+priority-low:
+  color: "0e8a16"
+  description: "Low priority issue"
+
+## Status Labels
+
+needs-triage:
+  color: "ededed"
+  description: "Needs review and categorization"
+
+good-first-issue:
+  color: "7057ff"
+  description: "Good for newcomers"
+
+help-wanted:
+  color: "008672"
+  description: "Extra attention is needed"
+
+wontfix:
+  color: "ffffff"
+  description: "This will not be worked on"
+
+blocked:
+  color: "000000"
+  description: "Blocked by another issue or external dependency"
+
+## Effort Labels
+
+effort-small:
+  color: "c2e0c6"
+  description: "Small effort (~1-2 hours)"
+
+effort-medium:
+  color: "fef2c0"
+  description: "Medium effort (~1-2 days)"
+
+effort-large:
+  color: "f9d0c4"
+  description: "Large effort (~1+ week)"

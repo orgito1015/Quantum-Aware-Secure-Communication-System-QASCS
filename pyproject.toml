@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qasccs"
+version = "0.2.0"
+description = "Quantum-Aware Secure Communication System (QASCS)"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.7.0",
+    "pyyaml>=6.0.1",
+    "cryptography>=42.0.0",
+]
+
+[project.scripts]
+qasccs = "qasccs.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.6.0",
+    "mypy>=1.10.0",
+    "types-PyYAML>=6.0.0",
+]
+web = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.29.0",
+]
+observability = [
+    "prometheus-client>=0.20.0",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+# F = pyflakes (undefined names, unused imports), E = pycodestyle errors,
+# UP = pyupgrade (flags version-gated syntax/APIs like py3.11-only datetime.UTC
+# when target-version is set above — the class of bug this project shipped with).
+select = ["E", "F", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["qasccs"]
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = "qasccs.webapp.*"
+ignore_missing_imports = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["qasccs*"]

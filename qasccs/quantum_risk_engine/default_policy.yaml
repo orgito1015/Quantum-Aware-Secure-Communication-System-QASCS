@@ -1,0 +1,13 @@
+# Default/example QASCS policy config.
+#
+# Copy this file, adjust the scenario_shor_year estimates to your own
+# organization's migration-timeline assumptions (or a more rigorous published
+# forecast), and point --policy-config / QASCS_POLICY_CONFIG at your copy.
+#
+# All three scenario keys are required; values are the year by which a
+# cryptographically relevant quantum computer capable of running Shor's
+# algorithm is assumed to exist, under each scenario.
+scenario_shor_year:
+  conservative: 2045
+  moderate: 2038
+  aggressive: 2032

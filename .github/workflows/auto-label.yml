@@ -1,0 +1,53 @@
+name: Auto Label Issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label based on title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const body = issue.body ? issue.body.toLowerCase() : '';
+            const labels = [];
+
+            // Auto-label based on keywords in title or body
+            const keywords = {
+              'quantum-risk-engine': ['quantum risk', 'risk engine', 'threat model'],
+              'secure-channel': ['tls', 'secure channel', 'connection', 'handshake'],
+              'pqc': ['post-quantum', 'pqc', 'kyber', 'dilithium', 'hybrid'],
+              'client': ['client'],
+              'server': ['server'],
+              'documentation': ['docs', 'documentation', 'readme'],
+              'testing': ['test', 'pytest', 'coverage'],
+              'tools': ['gen_certs', 'certificate', 'tools']
+            };
+
+            // Check for keyword matches
+            for (const [label, words] of Object.entries(keywords)) {
+              if (words.some(word => title.includes(word) || body.includes(word))) {
+                labels.push(label);
+              }
+            }
+
+            // Add labels if any were found
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: labels
+              });
+              
+              console.log(`Added labels: ${labels.join(', ')}`);
+            }
